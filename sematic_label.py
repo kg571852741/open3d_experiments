@@ -126,55 +126,7 @@ class custom_point_cloud_visualizer:
         pass
 
 
-    def pts_to_pcd_2(self):
-        # load txt file
-
-        self.inputFile = open("input/Dr_Mark/Goodman.pts", "r")  # Input-file
-        self.outputFile = open("open3d_experiments/pcds/Goodman.pcd", "w")
-        length = int(self.inputFile.readline())  # First line is the length
-
-        self.outputFile.write("VERSION .7\nFIELDS x y z rgb\nSIZE 4 4 4 4\nTYPE F F F F\nCOUNT 1 1 1 1\nWIDTH {}\nHEIGHT 1\nVIEWPOINT 0 0 0 1 0 0 0\nPOINTS {}\nself.data ascii\n".format(
-            length, length))  # Sets the header of pcd in a specific format, see more on http://pointclouds.org/documentation/tutorials/pcd_file_format.php
-
-        with tqdm(total=length, desc='Reading point cloud', unit='points') as input_bar:
-            currentLinePosition = 0
-
-            for line in self.inputFile:
-                currentLinePosition = currentLinePosition + 1
-                input_bar.update(1)
-
-                currentLine = line.rstrip().split(" ")
-
-                self.outputFile.write(" ".join([
-                    currentLine[0],  # x-value
-                    currentLine[1],  # y-value
-                    currentLine[2],  # z-value
-                    "{:e}".format((int(float(currentLine[4])) << 16) +
-                                (int(float(currentLine[5])) << 8) +
-                                int(float(currentLine[6])))]) + "\n")  # rgb value renderd in scientific format
-
-        self.inputFile.close()  
-        self.outputFile.close()
-        
-        print("All done")
-        # print output file directory
-        print("Output file: " + self.outputFile.name)
-        # exit()
-        
-        # Load saved point cloud and visualize it
-        pcd_load = o3d.io.read_point_cloud(self.outputFile.name, 
-                                           format='pcd',
-                                           remove_nan_points=True, 
-                                           remove_infinite_points=True, print_progress=True)
-        print(pcd_load)
-        # print(self.outputFile)
-        o3d.visualization.draw_geometries([pcd_load])
-
-        # convert Open3D.o3d.geometry.PointCloud to numpy array
-        xyz_load = np.asarray(pcd_load.points)
-        print('xyz_load')
-        print(xyz_load)
-    def pts_to_pcd_3(self):
+    def pts_to_pcd_npy(self):
     # load txt file
         self.inputFile = open("input/Dr_Mark/Goodman.pts", "r")  # Input-file
         self.outputFile = "open3d_experiments/pcds/Goodman.pcd"
@@ -463,4 +415,4 @@ class custom_point_cloud_visualizer:
 if __name__ == "__main__":
     point_cloud_visualizer = custom_point_cloud_visualizer()
     # point_cloud_visualizer.main()
-    point_cloud_visualizer.pts_to_pcd_3()
+    point_cloud_visualizer.pts_to_pcd_npy()
