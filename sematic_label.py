@@ -226,7 +226,13 @@ class custom_point_cloud_visualizer:
         xyz_load = np.asarray(pcd_load.points)
         print('xyz_load')
         print(xyz_load)
-        return xyz_load
+        # output xyz_load to npy file
+        npy_file = 'open3d_experiments/pcds/Goodman.npy'
+        np.save(npy_file, xyz_load)
+        print('npy_file directory')
+        print(npy_file)
+    
+        return npy_file
     def pts_to_pcd(self):
         # # load txt file
 
